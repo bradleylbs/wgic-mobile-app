@@ -68,8 +68,8 @@ class _AIChatScreenState extends State<AIChatScreen> {
   @override
   Widget build(BuildContext context) {
     final screenProvider = Provider.of<ScreenProvider>(context, listen: false);
-    
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: ModernAppBar(
         title: '',
         previousScreen: AppScreen.home,
@@ -143,85 +143,87 @@ class _AIChatScreenState extends State<AIChatScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          // Messages
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final message = _messages[index];
-                final isUser = message['type'] == 'user';
-                
-                return Align(
-                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.all(12),
-                    constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
-                    decoration: BoxDecoration(
-                      color: isUser ? Colors.white : Colors.grey[800],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message['content'],
-                          style: TextStyle(
-                            color: isUser ? Colors.black : Colors.white,
-                            fontSize: 14,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Messages
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: _messages.length,
+                itemBuilder: (context, index) {
+                  final message = _messages[index];
+                  final isUser = message['type'] == 'user';
+                  
+                  return Align(
+                    alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      padding: const EdgeInsets.all(12),
+                      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
+                      decoration: BoxDecoration(
+                        color: isUser ? Colors.white : Colors.grey[800],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            message['content'],
+                            style: TextStyle(
+                              color: isUser ? Colors.black : Colors.white,
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          message['time'],
-                          style: TextStyle(
-                            color: isUser ? Colors.grey[600] : Colors.grey[400],
-                            fontSize: 10,
+                          const SizedBox(height: 4),
+                          Text(
+                            message['time'],
+                            style: TextStyle(
+                              color: isUser ? Colors.grey[600] : Colors.grey[400],
+                              fontSize: 10,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
 
-          // Input
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[900],
-              border: Border(top: BorderSide(color: Colors.grey[800]!)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _messageController,
-                    decoration: const InputDecoration(
-                      hintText: 'Ask your biblical question...',
-                      border: InputBorder.none,
+            // Input
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+                border: Border(top: BorderSide(color: Colors.grey[800]!)),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _messageController,
+                      decoration: const InputDecoration(
+                        hintText: 'Ask your biblical question...',
+                        border: InputBorder.none,
+                      ),
+                      onFieldSubmitted: (_) => _sendMessage(),
                     ),
-                    onFieldSubmitted: (_) => _sendMessage(),
                   ),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: _sendMessage,
-                  style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    padding: const EdgeInsets.all(12),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: _sendMessage,
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(12),
+                    ),
+                    child: const Icon(Icons.send, size: 20),
                   ),
-                  child: const Icon(Icons.send, size: 20),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

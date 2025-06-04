@@ -11,9 +11,14 @@ android {
     namespace = "com.example.wgic_app"
     compileSdk = flutter.compileSdkVersion
 
+    buildCache {
+        isEnabled = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isIncremental = true
     }
 
     kotlinOptions {

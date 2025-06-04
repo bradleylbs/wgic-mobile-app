@@ -19,3 +19,13 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+
+// Enable build cache for all builds
+// This ensures local build cache is used for faster builds
+gradle.settingsEvaluated { settings ->
+    settings.buildCache {
+        local {
+            isEnabled = true
+        }
+    }
+}
